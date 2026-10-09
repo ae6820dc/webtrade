@@ -61,7 +61,7 @@ A készítéskor a 14 Node-teszt sikeresen futott. A helyi Chromium-futtatást a
 
 A `galactic-hypercars/` és a meglévő workflow-fájlok változatlanok. A repository `Generate repository index` workflow-ja automatikusan felveszi az új projektmappát; a mappán belül az `index.html` nyitja meg az alkalmazást.
 
-A jelenlegi `Webtrade tests and Pages deployment` workflow csak a `galactic-hypercars/**` útvonal változásaira indul push eseménykor. A hozzáadott projekt ezért önmagában nem aktiválja. Közzétételhez a meglévő workflow **Run workflow** művelete használható a main ágon, vagy a már sikeres publish job újrafuttatása: az a main aktuális fájljait tölti fel, és ellenőrzi az autós projekt változatlanságát. A workflow továbbra is az autós projekt tesztjeit futtatja; a NOIR tesztek külön futtathatók a fenti parancsokkal. Az összes új projektfájl e mappán belül van.
+A jelenlegi `Webtrade tests and Pages deployment` workflow csak a `galactic-hypercars/**` útvonal változásaira indul push eseménykor. Ezzel párhuzamosan a repository aktuális Pages-beállítása a main ágról automatikus `pages build and deployment` futást indított az új projekt és az index commitjára is. A külön Webtrade workflow szükség esetén a **Run workflow** művelettel indítható a main ágon. Régi publish job újrafuttatása duplikált `github-pages` artifact hibát okozhat, ezért új workflow-futást használj. A Webtrade workflow továbbra is az autós projekt tesztjeit futtatja; a NOIR tesztek külön futtathatók a fenti parancsokkal. Az összes új projektfájl e mappán belül van.
 
 ## Korlátok és képek
 
