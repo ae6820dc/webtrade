@@ -1,1 +1,59 @@
-<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Webtrade – Fájlindex</title><style>*{box-sizing:border-box}body{margin:0;background:#111827;color:#f3f4f6;font:16px Arial,sans-serif}.wrap{max-width:960px;margin:auto;padding:28px 18px}h1{margin:0 0 12px}.path{color:#9ca3af;margin:12px 0}button,a.item{border:0;border-radius:10px;padding:13px 15px;font-size:16px}button{background:#374151;color:white;cursor:pointer;margin:0 8px 18px 0}.list{display:grid;gap:9px}.item{display:block;background:#1f2937;color:#f3f4f6;text-decoration:none}.item:hover{background:#374151}</style></head><body><main class="wrap"><h1>📦 Webtrade</h1><div id="path" class="path">/</div><button onclick="home()">🏠 Főkönyvtár</button><button onclick="back()">⬅️ Vissza</button><div id="list" class="list"></div></main><script>const tree=[{"name":"readme.html","type":"file"}];let current=[];function items(){let a=tree;for(const n of current)a=a.find(x=>x.name===n).children;return a}function render(){document.getElementById("path").textContent="/"+current.join("/");const list=document.getElementById("list");list.replaceChildren();for(const item of items()){const a=document.createElement("a");a.className="item";a.textContent=(item.type==="dir"?"📁 ":"📄 ")+item.name;if(item.type==="dir"){a.href="#";a.onclick=e=>{e.preventDefault();current.push(item.name);render()}}else{a.href=[...current,item.name].map(encodeURIComponent).join("/");a.target="_blank"}list.append(a)}}function home(){current=[];render()}function back(){current.pop();render()}render();</script></body></html>
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>📦 Webtrade index</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;background:#111827;color:#f3f4f6;font-family:Arial,sans-serif}
+    .wrap{max-width:1000px;margin:auto;padding:32px 20px}
+    h1{margin:0 0 8px} .path{color:#9ca3af;margin-bottom:20px}
+    button,.item{font-size:16px;border:0;border-radius:10px;padding:12px 14px}
+    button{background:#374151;color:white;cursor:pointer;margin-right:8px;margin-bottom:18px}
+    .list{display:grid;gap:8px} .item{display:block;background:#1f2937;color:#f3f4f6;text-decoration:none;cursor:pointer}
+    .item:hover{background:#374151} .folder{font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>📦 Webtrade</h1>
+    <div id="path" class="path">/</div>
+    <button onclick="goHome()">🏠 Főkönyvtár</button>
+    <button id="back" onclick="goBack()">⬅️ Vissza</button>
+    <div id="list" class="list"></div>
+  </div>
+  <script>
+    const tree = [{"name": "galactic-hypercars", "type": "dir", "children": [{"name": "assets", "type": "dir", "children": [{"name": "fleet-0.svg", "type": "file"}, {"name": "fleet-1.svg", "type": "file"}, {"name": "fleet-10.svg", "type": "file"}, {"name": "fleet-11.svg", "type": "file"}, {"name": "fleet-12.svg", "type": "file"}, {"name": "fleet-13.svg", "type": "file"}, {"name": "fleet-14.svg", "type": "file"}, {"name": "fleet-15.svg", "type": "file"}, {"name": "fleet-16.svg", "type": "file"}, {"name": "fleet-17.svg", "type": "file"}, {"name": "fleet-18.svg", "type": "file"}, {"name": "fleet-19.svg", "type": "file"}, {"name": "fleet-2.svg", "type": "file"}, {"name": "fleet-20.svg", "type": "file"}, {"name": "fleet-21.svg", "type": "file"}, {"name": "fleet-22.svg", "type": "file"}, {"name": "fleet-23.svg", "type": "file"}, {"name": "fleet-24.svg", "type": "file"}, {"name": "fleet-25.svg", "type": "file"}, {"name": "fleet-26.svg", "type": "file"}, {"name": "fleet-27.svg", "type": "file"}, {"name": "fleet-28.svg", "type": "file"}, {"name": "fleet-29.svg", "type": "file"}, {"name": "fleet-3.svg", "type": "file"}, {"name": "fleet-30.svg", "type": "file"}, {"name": "fleet-31.svg", "type": "file"}, {"name": "fleet-32.svg", "type": "file"}, {"name": "fleet-33.svg", "type": "file"}, {"name": "fleet-34.svg", "type": "file"}, {"name": "fleet-35.svg", "type": "file"}, {"name": "fleet-36.svg", "type": "file"}, {"name": "fleet-37.svg", "type": "file"}, {"name": "fleet-38.svg", "type": "file"}, {"name": "fleet-39.svg", "type": "file"}, {"name": "fleet-4.svg", "type": "file"}, {"name": "fleet-5.svg", "type": "file"}, {"name": "fleet-6.svg", "type": "file"}, {"name": "fleet-7.svg", "type": "file"}, {"name": "fleet-8.svg", "type": "file"}, {"name": "fleet-9.svg", "type": "file"}]}, {"name": "tests", "type": "dir", "children": [{"name": "browser.test.js", "type": "file"}, {"name": "catalog.test.js", "type": "file"}]}, {"name": "app.js", "type": "file"}, {"name": "catalog-data.js", "type": "file"}, {"name": "catalog.js", "type": "file"}, {"name": "generate-assets.js", "type": "file"}, {"name": "index.html", "type": "file"}, {"name": "mark.svg", "type": "file"}, {"name": "package.json", "type": "file"}, {"name": "README.md", "type": "file"}, {"name": "storage.js", "type": "file"}, {"name": "styles.css", "type": "file"}]}, {"name": "readme.html", "type": "file"}];
+    let current = [];
+
+    function getItems(){
+      let items = tree;
+      for (const part of current) items = items.find(x => x.name === part).children;
+      return items;
+    }
+    function render(){
+      document.getElementById('path').textContent = '/' + current.join('/') + (current.length ? '/' : '');
+      document.getElementById('back').style.display = current.length ? 'inline-block' : 'none';
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+      for (const item of getItems()){
+        const el = document.createElement('a');
+        el.className = 'item ' + (item.type === 'dir' ? 'folder' : '');
+        el.textContent = (item.type === 'dir' ? '📁 ' : '📄 ') + item.name;
+        if (item.type === 'dir') {
+          el.href = '#';
+          el.onclick = e => { e.preventDefault(); current.push(item.name); render(); };
+        } else {
+          const path = [...current, item.name].map(encodeURIComponent).join('/');
+          el.href = path;
+          el.target = '_blank';
+        }
+        list.appendChild(el);
+      }
+    }
+    function goHome(){ current = []; render(); }
+    function goBack(){ current.pop(); render(); }
+    render();
+  </script>
+</body>
+</html>
