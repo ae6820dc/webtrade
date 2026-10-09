@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10110f"><meta name="description" content="NOIR Privé — fiktív, 21 év feletti karakterek luxus piactere. Minden interakció és tranzakció szimulált.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>NOIR Privé · A kivételes találkozások világa</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Ugrás a tartalomra</a>
+  <div class="demo-strip"><span>18+ &nbsp; FIKTÍV FELNŐTT KARAKTEREK</span><span>Demóélmény · Nincs valódi foglalás vagy fizetés</span></div>
+  <header><a class="brand" href="#discover" aria-label="NOIR Privé kezdőlap">N<span class="brand-name">NOIR <i>Privé</i><small>THE ART OF CONNECTION</small></span></a><nav aria-label="Fő navigáció"><a href="#discover">Felfedezés</a><a href="#favorites">Kedvencek <span id="fav-count">0</span></a><a href="#membership">Privé Club</a><a href="#account">Fiókom</a></nav><div class="header-actions"><button data-action="notifications" class="icon" aria-label="Értesítések">♧<span id="notice-count" class="dot"></span></button><button data-action="wallet" class="wallet-link">◇ <span id="balance">—</span> kr</button><button data-action="login" id="login-button" class="outline">Belépés ↗</button></div></header>
+  <main id="main"><div class="loading" role="status">A Privé kollekció betöltése…</div></main>
+  <footer><div class="brand-name">NOIR <i>Privé</i></div><p>Egy világ, ahol a részletek számítanak.</p><div><button data-action="legal">Adatvédelem és demószabályok</button><a href="./USER-GUIDE.hu.md">Felhasználói útmutató</a><button data-action="backup">Biztonsági mentés</button></div><small>© 2026 NOIR Privé · Bemutatóprojekt. Minden karakter 21+. Minden kép, értékelés, üzenet és tranzakció fiktív vagy szimulált.</small></footer>
+  <dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
+  <dialog id="age-gate" aria-labelledby="age-title"><div class="gate"><div class="eyebrow">NOIR PRIVÉ · DEMONSTRÁCIÓ</div><div class="gate-monogram">N</div><h1 id="age-title">A belépés kiváltság.<br><i>A tudatosság alapfeltétel.</i></h1><p>Ez a fiktív luxus companion piactér kizárólag 18 év feletti látogatóknak szól. Minden karakter legalább 21 éves. Nincsenek valódi szolgáltatások, kapcsolatfelvételek vagy pénzügyi tranzakciók.</p><label class="check"><input type="checkbox" id="adult-check"> Elmúltam 18 éves, és megértettem a demó jellegét.</label><button class="gold" id="enter" disabled>Belépek a demóba ↗</button><button id="decline" class="quiet">Mégsem lépek be</button><p id="age-error" role="status"></p><small>A korhatár nyilatkozat, nem valódi életkor-ellenőrzés.</small></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./app.js"></script>
+</body></html>
