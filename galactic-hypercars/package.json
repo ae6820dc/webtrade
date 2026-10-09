@@ -1,0 +1,1 @@
+{"name":"webtrade-3000","private":true,"type":"module","scripts":{"test":"node tests/catalog.test.js && node tests/browser.test.js","generate":"node generate-assets.js"},"devDependencies":{"playwright":"1.58.2"}}

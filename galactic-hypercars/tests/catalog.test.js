@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';
+import {catalog,generateCatalog,manufacturers,filterVehicles,imageFor} from '../catalog.js';
+import {readFileSync} from 'node:fs';
+assert.equal(catalog.length,1000);assert.equal(new Set(catalog.map(v=>v.id)).size,1000);assert.equal(new Set(catalog.map(v=>v.manufacturer+' '+v.model)).size,1000);assert.equal(manufacturers.length,32);assert.deepEqual(catalog,generateCatalog());
+for(const v of catalog){assert(v.year>=2950&&v.year<=3000);for(const key of ['price','power','speed','acceleration','range'])assert(v[key]>0);assert(v.description.includes('kitalált'));for(let i=0;i<3;i++){const [path,fragment]=imageFor(v,i).split('#');assert(readFileSync(new URL('../'+path,import.meta.url),'utf8').includes(`id="${fragment}"`));}}
+const f={manufacturer:'Aetherion',propulsion:'Plazmahajtás',minPrice:10000000,maxYear:2990,speed:500,power:2000,range:1000};const results=filterVehicles(catalog,f);assert(results.length>0);assert(results.every(v=>v.manufacturer===f.manufacturer&&v.propulsion===f.propulsion&&v.price>=f.minPrice&&v.year<=f.maxYear&&v.speed>=f.speed&&v.power>=f.power&&v.range>=f.range));
+assert.equal(filterVehicles(catalog,{q:catalog[0].model}).length,1);assert.equal(filterVehicles(catalog,{q:'nonexistent-car-xxx'}).length,0);assert.equal(filterVehicles(catalog,{minPrice:999999999}).length,0);
+for(const [sort,key,sign]of [['price','price',1],['expensive','price',-1],['speed','speed',-1],['power','power',-1],['newest','year',-1],['oldest','year',1]]){const a=filterVehicles(catalog,{sort});assert(a.every((v,i)=>i===0||(v[key]-a[i-1][key])*sign>=0));}const alpha=filterVehicles(catalog,{sort:'alpha'});assert(alpha.every((v,i)=>!i||(alpha[i-1].manufacturer+alpha[i-1].model).localeCompare(v.manufacturer+v.model,'hu')<=0));
+console.log('PASS: 1000 unique seeded records, 32 manufacturers, 3000 static SVG views, combined filters, search, 7 sorting modes.');

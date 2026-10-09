@@ -1,0 +1,63 @@
+name: Webtrade tests and Pages deployment
+on:
+  push:
+    branches: [main]
+    paths: ['galactic-hypercars/**', '.github/workflows/webtrade-pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: webtrade-pages
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: galactic-hypercars
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - name: Test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: webtrade-browser-evidence
+          path: galactic-hypercars/tests/results/
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Confirm application matches tested commit
+        run: git diff --exit-code "${{ github.sha }}" -- galactic-hypercars
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Verify public application responds
+        run: |
+          curl --fail --retry 6 --retry-delay 10 --retry-all-errors https://ae6820dc.github.io/webtrade/galactic-hypercars/ -o /tmp/webtrade-index.html
+          grep -q 'WEBTRADE 3000' /tmp/webtrade-index.html
+          curl --fail --retry 3 --retry-delay 5 https://ae6820dc.github.io/webtrade/galactic-hypercars/catalog-data.js -o /tmp/webtrade-catalog.js
+          grep -q 'WT-1000' /tmp/webtrade-catalog.js
