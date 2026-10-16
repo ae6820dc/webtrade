@@ -23,7 +23,7 @@ HTTP(S) szerverről használd, ne file:// megnyitással: a modulok és a JSON-ka
 - Három eredeti digitális galérianézet minden profilhoz (648 nézet), divatstílus, nyelvek, kategóriák, csomagok, 30 napra tervezhető heti elérhetőség.
 - Név/város/hangulat keresés, ékezetfüggetlen javaslatok, kerület-, kor-, ár-, kategória-, dátum-, értékelés-, prémium- és demóellenőrzés-szűrők; hatféle rendezés.
 - Mentett keresések, kedvencek, legutóbb megtekintett profilok, egyszerű kategória/város alapú ajánlás és négyprofilos összehasonlítás.
-- Demóregisztráció és belépés; látogató, ügyfél, hirdető és adminisztrátor nézet. Regisztrált admin helyett szabadon elérhető, egyértelműen jelölt admin-demóbelépés.
+- Automatikus helyi hexaprofilok; látogató, ügyfél, hirdető és adminisztrátor demónézet. Generate User: PIN 1111, majd jelszó nélküli profilváltás.
 - Csomag/időtartam választás, szabad kezdési idők, ütközésellenőrzés a teljes időtartamra, összesítő, promóciók, tagsági kedvezmény, szimulált fizetés és visszaigazolás.
 - 25 000 kezdő demókredit fiókonként, virtuális feltöltés, egyszeri tagságok, hűségpont-beváltás, tranzakciós előzmények és letölthető TXT-demóbizonylatok.
 - Lemondás és egyszeri teljes visszatérítés; hirdetői/admin státuszfrissítés és lezárás.
@@ -41,7 +41,7 @@ HTTP(S) szerverről használd, ne file:// megnyitással: a modulok és a JSON-ka
 - IndexedDB nélkül látható figyelmeztetésű memóriamód működik, tartós mentés nélkül. Böngészőkvóta vagy mentési hiba esetén nincs részleges kreditköltés.
 - `app.js` és `styles.css`: függőségmentes, reszponzív kliens, natív dialogok, billentyűzetes fókusz, skip link, állapotüzenetek és csökkentett animáció.
 
-A demójelszavak helyben, olvasható adatként tárolódnak és exportálódnak. Ez szándékosan **nem valódi hitelesítés vagy hozzáférésvédelem**. Valódi jelszó, név, e-mail, telefonszám vagy személyes kép ne szerepeljen benne. A kedvencek/keresések böngészőszintűek; a pénztárcák/foglalások/üzenetek fiókonként különülnek el. A demóval azonos GitHub Pages origin más alkalmazásai technikailag hozzáférhetnek a böngészőtárolóhoz: ezért kizárólag fiktív adat használható.
+Az új profilokhoz nem tartozik jelszó; régi mentések demójelszót tartalmazhatnak. Ez szándékosan **nem valódi hitelesítés vagy hozzáférésvédelem**. Valódi jelszó, név, e-mail, telefonszám vagy személyes kép ne szerepeljen benne. A kedvencek/keresések profilonként mentődnek; a pénztárcák/foglalások/üzenetek fiókonként különülnek el. A demóval azonos GitHub Pages origin más alkalmazásai technikailag hozzáférhetnek a böngészőtárolóhoz: ezért kizárólag fiktív adat használható.
 
 ## Ellenőrzés
 
@@ -53,7 +53,7 @@ python3 -m pip install playwright
 npm run test:browser
 ```
 
-A 7 Chromium-integrációs teszt saját localhost szervert indít és izolált böngészőkontextusokat használ. Korhatár, reszponzivitás, keresés, galéria, kedvencek, összehasonlítás, regisztráció, fizetés, lemondás, bizonylat, wallet, hirdetés/moderálás, kampányok, több-lapos IndexedDB, adatmentés/import, sérült adat és reset ellenőrzését tartalmazza. Képernyőképeket alapértelmezésben a rendszer temp mappájába ír (`NOIR_TEST_RESULTS` felülírhatja).
+A 7 Chromium-integrációs teszt saját localhost szervert indít és izolált böngészőkontextusokat használ. Korhatár, reszponzivitás, keresés, galéria, kedvencek, összehasonlítás, profilgenerálás, fizetés, lemondás, bizonylat, wallet, hirdetés/moderálás, kampányok, több-lapos IndexedDB, adatmentés/import, sérült adat és reset ellenőrzését tartalmazza. Képernyőképeket alapértelmezésben a rendszer temp mappájába ír (`NOIR_TEST_RESULTS` felülírhatja).
 
 A készítéskor a 14 Node-teszt sikeresen futott. A helyi Chromium-futtatást a sandbox socketkorlátozása blokkolta; a külön futtatási engedélykérés megszakadt. **A Chromium-tesztek elkészültek, de ebben a környezetben nem igazoltan lefutottak.** Lásd `tests/RESULTS.md`.
 
@@ -75,3 +75,9 @@ A jelenlegi `Webtrade tests and Pages deployment` workflow csak a `galactic-hype
 - A hirdetéselőnézet a hirdetést menti és moderálásra küldi; a felület ezt jelzi.
 
 Magyar használati útmutató: [USER-GUIDE.hu.md](./USER-GUIDE.hu.md).
+
+## Automatic local profiles
+
+Generate User in Account creates a cryptographically random uppercase 8-digit hexadecimal profile after masked PIN `1111`. The PIN prevents accidental creation only. Saved profiles load automatically and switch without passwords. All commerce remains simulated. Existing legacy data is retained.
+
+Fixed Program ID: `0dc6fdc9b7660e219f9bf5f180399e5e`.

@@ -1,0 +1,4 @@
+node_modules/
+.webtrade-test-profile*/
+**/tests/results/
+__pycache__/

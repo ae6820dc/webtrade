@@ -41,9 +41,11 @@ class BrowserTests(unittest.TestCase):
         selector=f'[data-action="{action}"]'+(f'[data-id="{id}"]' if id else '')
         (scope or self.page).locator(selector).first.click()
     def demo(self,role):
-        if not self.page.locator(f'[data-action="demo-login"][data-id="{role}"]').count():
-            self.page.locator('nav a[href="#account"]').click()
-        self.click('demo-login',role)
+        self.page.locator('nav a[href="#account"]').click()
+        if not self.state()['users']:
+            self.click('generate-user');self.page.locator('#pin').fill('1111');self.page.locator('#role').select_option(role);self.page.locator('#generate-form button[type="submit"]').click()
+        else:
+            self.click('demo-login',role)
         expect(self.page.locator('.screen-title .eyebrow')).to_contain_text({'customer':'ÜGYFÉL','advertiser':'HIRDETŐ','admin':'ADMINISZTRÁTOR'}[role])
     def state(self): return self.page.evaluate(READ)
     def test_01_age_gate_and_layout(self):
@@ -60,7 +62,7 @@ class BrowserTests(unittest.TestCase):
         self.click('advanced');self.page.locator('#minAge').fill('30');self.page.locator('#maxAge').fill('45');self.page.locator('#search-form button[type="submit"]').click()
         self.click('save-search');expect(self.page.locator('.saved-row')).to_be_visible()
         self.click('favorite',scope=self.page.locator('.card').first);self.page.locator('[data-compare]').first.check()
-        self.page.reload();expect(self.page.locator('#fav-count')).to_have_text('1');expect(self.page.locator('.compare-dock')).to_contain_text('1/4')
+        expect(self.page.locator('.compare-dock')).to_contain_text('1/4');self.page.wait_for_function("()=>document.body.getAttribute('aria-busy')===null");self.page.reload();expect(self.page.locator('#fav-count')).to_have_text('1');expect(self.page.locator('.compare-dock')).to_contain_text('1/4')
         self.click('compare');expect(self.page.locator('table')).to_contain_text('Demóellenőrzés')
         self.click('remove-compare');expect(self.page.locator('.empty')).to_contain_text('Válassz')
         self.click('favorites',scope=self.page) if self.page.locator('[data-action="favorites"]').count() else self.page.locator('nav a[href="#favorites"]').click()
@@ -73,8 +75,7 @@ class BrowserTests(unittest.TestCase):
         self.click('close',scope=m);self.click('notifications');expect(m).to_contain_text('szimulált válasz');self.click('close',scope=m)
         self.click('profile','NP-0001');self.click('report','NP-0001',m);m.locator('#reportText').fill('Fiktív tesztjelentés.');m.locator('button[type="submit"]').click();expect(m).not_to_be_visible();self.assertEqual(len(self.state()['reports']),1)
     def test_04_registration_checkout_receipt_cancel_wallet(self):
-        self.enter();self.click('login');self.click('register',scope=self.page.locator('#modal'));m=self.page.locator('#modal')
-        m.locator('#name').fill('Fiktív Ügyfél');m.locator('#handle').fill('browser-customer');m.locator('#password').fill('demo-password');m.locator('[name="adult"]').check();m.locator('button[type="submit"]').click();expect(m).not_to_be_visible()
+        self.enter();self.demo('customer');m=self.page.locator('#modal')
         self.assertEqual(self.state()['users'][0]['balance'],25000)
         self.page.locator('nav a[href="#discover"]').click();self.click('profile','NP-0001');self.click('book','NP-0001',m)
         day=self.page.evaluate("async ()=>{let D=await import('./core.js');let p=(await (await fetch('./profiles.json')).json())[0];return Array.from({length:10},(_,i)=>new Date(Date.now()+i*86400000).toISOString().slice(0,10)).find(d=>D.availableSlots(p,d).length)}")
@@ -85,7 +86,7 @@ class BrowserTests(unittest.TestCase):
         self.assertIn('NOIR-DEMO',dl.value.suggested_filename)
         self.click('history',scope=m);self.click('cancel-confirm');self.click('cancel',scope=m);expect(m).not_to_be_visible();self.assertEqual(self.state()['users'][0]['balance'],25000)
         self.click('wallet');m.locator('#amount').fill('5000');m.locator('button[type="submit"]').click();expect(m).to_contain_text('30');self.assertEqual(self.state()['users'][0]['balance'],30000)
-        self.click('close',scope=m);self.page.reload();expect(self.page.locator('.screen-title')).to_contain_text('Fiktív');self.assertEqual(self.state()['users'][0]['balance'],30000)
+        self.click('close',scope=m);self.page.reload();expect(self.page.locator('.screen-title')).to_contain_text(self.state()['users'][0]['name']);self.assertEqual(self.state()['users'][0]['balance'],30000)
     def test_05_advertiser_admin_campaign_and_categories(self):
         self.enter();self.demo('advertiser');self.click('new-ad');m=self.page.locator('#modal')
         m.locator('#name').fill('Fiktív Aurora Atelier');m.locator('#bio').fill('Eredeti fiktív felnőtt karakter vagyok; galériák, jazz és kortárs design inspirálnak.');m.locator('[name="categories"]').first.check();m.locator('[name="fictional"]').check();m.locator('button[type="submit"]').first.click();expect(m).not_to_be_visible();expect(self.page.locator('#main')).to_contain_text('Ellenőrzésre vár')
@@ -113,7 +114,7 @@ class BrowserTests(unittest.TestCase):
         self.enter();self.demo('customer');self.page.locator('nav a[href="#membership"]').click();self.click('membership-confirm','gold');self.click('buy-membership','gold',self.page.locator('#modal'));expect(self.page.locator('#modal')).not_to_be_visible();self.assertEqual(self.state()['users'][0]['membership'],'gold')
         self.page.locator('nav a[href="#account"]').click()
         for tab in ['bookings','transactions','messages']:self.click('account-tab',tab);expect(self.page.locator('#main .panel')).not_to_have_count(0)
-        self.click('logout');expect(self.page.locator('#main')).to_contain_text('Lépj be')
+        self.click('login');expect(self.page.locator('#modal')).to_contain_text('Helyi profilok');self.click('close',scope=self.page.locator('#modal'))
         self.page.locator('nav a[href="#discover"]').click();self.page.locator('#q').fill('NO-SUCH-PROFILE');self.page.locator('#search-form button[type="submit"]').click();expect(self.page.locator('.empty')).to_contain_text('Nincs ilyen találat')
         self.click('legal');expect(self.page.locator('#modal')).to_contain_text('Nincs bankkártyaadat');self.click('close',scope=self.page.locator('#modal'))
 

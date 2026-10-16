@@ -7,7 +7,7 @@
     "test": "node --test --test-isolation=none --test-reporter=spec tests/*.test.js",
     "serve": "python3 -m http.server 8000",
     "generate": "node generate-data.js",
-    "test:browser": "python3 tests/browser_test.py"
+    "test:browser": "python3 tests/browser_test.py && python3 tests/profiles_browser.py"
   },
   "engines": {
     "node": ">=22"

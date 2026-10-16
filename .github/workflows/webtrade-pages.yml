@@ -2,7 +2,7 @@ name: Webtrade tests and Pages deployment
 on:
   push:
     branches: [main]
-    paths: ['galactic-hypercars/**', '.github/workflows/webtrade-pages.yml']
+    paths: ['cyber-luxury-agency/**', 'galactic-hypercars/**', '.github/workflows/webtrade-pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,6 +26,16 @@ jobs:
       - run: npm install --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright==1.58.0
+      - name: Verify NOIR and same-origin profile isolation
+        run: |
+          export CHROMIUM_PATH="$(node -e 'console.log(require("playwright").chromium.executablePath())')"
+          cd ../cyber-luxury-agency
+          npm test
+          npm run test:browser
       - name: Test evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -44,7 +54,7 @@ jobs:
           ref: main
           fetch-depth: 0
       - name: Confirm application matches tested commit
-        run: git diff --exit-code "${{ github.sha }}" -- galactic-hypercars
+        run: git diff --exit-code "${{ github.sha }}" -- cyber-luxury-agency galactic-hypercars
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

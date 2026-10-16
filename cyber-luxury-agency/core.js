@@ -10,6 +10,21 @@ export const currentUser = s => s.users.find(u=>u.id===s.session) ?? null;
 export function requireRole(s,roles) { const u=currentUser(s); if(!u || !roles.includes(u.role)) fail('Ehhez a művelethez megfelelő demófiók szükséges.'); return u; }
 export function audit(s,action) { s.audit.unshift({id:uid(),date:new Date().toISOString(),user:s.session ?? 'visitor',action}); s.audit=s.audit.slice(0,500); }
 export function notify(s,text,userId=s.session) {s.notifications.unshift({id:uid(),userId,text,read:false,date:new Date().toISOString()});s.notifications=s.notifications.slice(0,200);}
+export const PROGRAM_ID = '0dc6fdc9b7660e219f9bf5f180399e5e';
+const localLists=['favorites','compare','recent','savedSearches'];
+export function selectUser(s,id) {
+ const next=s.users.find(u=>u.id===id);if(!next)fail('Ismeretlen helyi profil.');
+ const old=currentUser(s);if(old)old.local=Object.fromEntries(localLists.map(k=>[k,structuredClone(s[k])]));
+ for(const k of localLists)s[k]=structuredClone(next.local?.[k]??[]);
+ s.session=id;return next;
+}
+export function generateUser(s,pin,role='customer') {
+ if(pin!=='1111')fail('Hibás létrehozási PIN.');
+ if(!['customer','advertiser','admin'].includes(role))fail('Érvénytelen szerepkör.');
+ let name;do{name=Array.from(crypto.getRandomValues(new Uint8Array(4)),b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();}while(s.users.some(u=>u.handle.toUpperCase()===name));
+ const u={id:uid(),name,handle:name,generated:true,role,balance:25000,membership:null,points:0};
+ s.users.push(u);selectUser(s,u.id);transaction(s,u,25000,'Kezdő demóegyenleg','seed');audit(s,'Generate User');return u;
+}
 export function register(s,{name,handle,password,role,adult}) {
   if(!adult) fail('A regisztrációhoz 18+ nyilatkozat szükséges.');
   if(!['customer','advertiser'].includes(role)) fail('Érvénytelen regisztrációs szerepkör.');
@@ -90,7 +105,8 @@ export function validateState(raw) {
  const ownId=id=>s.users.some(u=>u.id===id);
  for(const k of ['users','favorites','compare','recent','savedSearches','bookings','transactions','messages','reports','ads','categories','campaigns','notifications','audit'])if(!Array.isArray(s[k])||s[k].length>10000)fail('Sérült vagy túl nagy demóadat.');
  if(new Set(s.users.map(u=>u.id)).size!==s.users.length)fail('Duplikált fiókazonosító.');
- for(const u of s.users)if(!identifier(u.id)||typeof u.handle!=='string'||typeof u.name!=='string'||typeof u.password!=='string'||!['customer','advertiser','admin'].includes(u.role)||!Number.isSafeInteger(u.balance)||u.balance<0||!Number.isSafeInteger(u.points)||u.points<0)fail('Sérült fiókadat.');
+ for(const u of s.users)if(!identifier(u.id)||typeof u.handle!=='string'||typeof u.name!=='string'||(!u.generated&&typeof u.password!=='string')||!['customer','advertiser','admin'].includes(u.role)||!Number.isSafeInteger(u.balance)||u.balance<0||!Number.isSafeInteger(u.points)||u.points<0)fail('Sérült fiókadat.');
+ for(const u of s.users){if(u.generated&&(!/^[0-9A-F]{8}$/.test(u.name)||u.handle!==u.name))fail('Sérült generált profil.');if(u.local){if(typeof u.local!=='object'||Array.isArray(u.local)||Object.keys(u.local).some(k=>!localLists.includes(k)))fail('Sérült helyi listák.');const copy={...s,users:s.users.map(({local,...record})=>record),...u.local};validateState(copy);}}
  if(s.session!==null&&!s.users.some(u=>u.id===s.session))s.session=null;
  for(const k of ['overrides','views','reviewModeration'])if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))fail('Sérült beállítás.');
  for(const p of s.ads)if(!identifier(p.id)||typeof p.name!=='string'||p.age<21||!Number.isSafeInteger(p.price)||p.price<100||!Array.isArray(p.images)||p.images.some(src=>typeof src!=='string'||!(/^(\.\/assets\/[^\s<>]+\.svg(?:#\w+)?|data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+)$/.test(src)))||!Array.isArray(p.categories)||!Array.isArray(p.packages)||!p.availability||!Array.isArray(p.availability.days)||!Array.isArray(p.availability.hours)||!Array.isArray(p.reviews))fail('Sérült hirdetésadat.');

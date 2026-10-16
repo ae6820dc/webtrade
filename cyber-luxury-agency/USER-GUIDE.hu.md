@@ -13,9 +13,9 @@ A szív kedvencet ment; az Összehasonlítás jelölő legfeljebb négy profilt 
 
 ## Demófiókok és szerepkörök
 
-A Belépés ablakban készíthetsz ügyfél- vagy hirdető-demófiókot, vagy választhatod az azonnali Ügyfél / Hirdető / Adminisztrátor demóbelépést. Adminisztrációhoz nem kell valódi jogosultságot kérni: ez szabadon kipróbálható demonstráció.
+A Fiókom területen a Generate User gombbal készíthetsz helyi profilt. Add meg a maszkolt létrehozási PIN-t: 1111. Hibás PIN vagy Mégsem esetén nem készül profil. A PIN nem valódi hitelesítés.
 
-A saját regisztráció fiktív megjelenített nevet, 3–30 karakteres demóazonosítót és 8–100 karakteres demójelszót kér. Valódi nevet, e-mailt és valódi jelszót ne adj meg! A fiók csak a böngésződben tárolódik, nem valódi hitelesítés. Minden új demófiók 25 000 fiktív kreditet kap.
+Az azonosító automatikusan generált, 8 jegyű nagybetűs hexadecimális név. Az aktív profil újratöltéskor automatikusan betöltődik; a profilgombokkal jelszó nélkül válthatsz. A pénztárca, foglalások, kedvencek és keresések profilonként mentődnek. Minden új profil 25 000 fiktív kreditet kap. Az Ügyfél / Hirdető / Admin demószerepkörök szabadon kipróbálhatók a Fiókom oldalon. A rögzített Program ID a fiókterületen és láblécben látható.
 
 A Fiókom oldalon szerepkörönként külön eszközök jelennek meg. Az oldal alján bármikor válthatsz a tesztszerepkörök között; a pénztárcák és foglalások külön maradnak. A kedvencek és keresések az egész böngészőben közösek.
 
