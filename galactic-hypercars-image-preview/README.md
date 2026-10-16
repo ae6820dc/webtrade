@@ -1,42 +1,40 @@
-# Galactic Hypercars image preview — batch 01
-
-Standalone preview for issue #2's PREVIEW FIRST requirements. No assets or references in the original application have been modified. Explicit user approval is required before any integration.
+# Galactic Hypercars image preview
 
 Preview: https://ae6820dc.github.io/webtrade/galactic-hypercars-image-preview/index.html
 
-## Scope and source
+## Verified coverage
 
-The immutable `../galactic-hypercars/catalog-data.js` contains exactly **1,000 entries and 1,000 unique IDs**. `catalog.js` exports this initial catalog; the generator also specifies 1,000 entries. This preview maps eight individually generated images to WT-0001 through WT-0008 using exact manufacturer/model names, exterior colors and propulsion values. These entries cover all eight exterior colors and all six propulsion types. `manifest.json` is the stable mapping; the HTML has its own static captions and needs no JavaScript or access to the original application at runtime.
+**16 real, distinct WebP files completed; 984 images pending.** WT-0001–WT-0008 are the approved originals, preserved byte-for-byte. Batch 02 adds WT-0009–WT-0016. This is a completed eight-image generation batch, not full completion of issue #2. No generation quota error was observed in this batch; the remaining generation work is still outstanding.
 
-**8 completed images; 992 cars remain without generated candidates.** Full-catalog generation and visual review are beyond this bounded preview session. This is a representative design review batch, not a claim of full coverage. After approval, further batches can extend the mapping, with visual review and duplicate checks before any separately approved integration.
+All work remains in this separate preview directory. The original `galactic-hypercars/` application and its assets are unchanged. Preview approval does not authorize integration into that application.
 
-## Image provenance and optimization
+`manifest.json` maps all 1,000 exact IDs, manufacturer/model names, exterior colors and propulsion values from the original catalog. `image: null` means no generated image exists. Never count pending records as completed files, and never substitute, recolor or reuse another car's image. The default gallery displays completed cars; the catalog and pending filters expose the remaining work without placeholder car imagery. Search supports ID, name, original Hungarian colors and English color names. Only 12 cards are rendered per page; actual images use native lazy loading with intrinsic dimensions.
 
-Created on 2026-10-16 with the available OpenAI image-generation tool, one independent generation per car, with no reference images or third-party stock assets. Prompts requested fictional futuristic vehicles, no real brand marks, text or watermarks, photorealistic premium automotive lighting and whole-vehicle compositions. Generated output is subject to the service's applicable terms; no separate stock license is asserted.
+## Provenance and art direction
 
-Art directions:
+All images were individually generated with the available OpenAI image-generation tool on 2026-10-16. No stock assets or real brand marks were requested. Generated output is subject to the service's applicable terms. Batch 02 retains the approved premium photorealistic futuristic automotive style, with independent vehicle geometry and settings:
 
 | ID | Design direction |
 | --- | --- |
-| WT-0001 | Ion silver plasma teardrop; split fenders and turbine wheels; orbital showroom |
-| WT-0002 | Obsidian antigravity grand tourer; monolithic body and amber lighting; wet spaceport |
-| WT-0003 | Plasma blue quantum track wedge; aero channels and large wing; white laboratory |
-| WT-0004 | Nebula purple fusion concept; organic curves and spherical wheel pods; Saturn moon |
-| WT-0005 | Aurora cyan levitating speedster; twin cockpit nacelles and wheel rings; dawn salt plain |
-| WT-0006 | Solar gold antimatter concept; folded surfaces and vertical fins; orbital hangar |
-| WT-0007 | Mars red muscular plasma hypercar; curved arches and wraparound canopy; Martian canyon |
-| WT-0008 | Moon white antigravity coupe; porcelain surfaces and floating roof; lunar deck |
+| WT-0009 | Helion Arc ONE-3008; ion silver quantum coupe, crescent fairings and exposed core; icy ocean observatory |
+| WT-0010 | Veltrix Arc S-3009; obsidian fusion stealth coupe, hexagonal wheels and twin canopy; volcanic moon |
+| WT-0011 | Chronova Oblivion RS-3010; plasma blue magnetic racer, ski-like front pods and rear rings; maglev spaceport |
+| WT-0012 | Zephyrix Vector ONE-3011; nebula purple antimatter arrowhead, separated front nacelles; orbital accelerator |
+| WT-0013 | Voidstar Phantom XR-3012; aurora cyan plasma fastback, side gills and multi-part rear wing; canyon bridge |
+| WT-0014 | Luminara Mirage XR-3013; solar gold antigravity barchetta, spherical pods and open cockpit; cloud station |
+| WT-0015 | Cryovex Seraph XR-3014; Mars red six-wheel quantum racer, bifurcated nose; Europa glacier |
+| WT-0016 | Ecliptix Phantom GT-3015; moon white fusion GT, visor lights and twin dorsal fins; orbital conservatory |
 
-Images are 1536 × 1024 WebP, encoded once from generated PNGs with Pillow quality 84, method 6. No image is repeated or recolored to stand in for another car. Intrinsic dimensions reserve layout space; below-the-fold images use native lazy loading. Direct full-image links work without scripting. If an image fails, descriptive alt text and the independently rendered name/ID remain available.
+Each new image was visually inspected and encoded from its independent generated PNG as 1536 × 1024 WebP using Pillow quality 84, method 6. Batch 02 files are 209,422–348,598 bytes each. Approved batch 01 files were not re-encoded.
 
-## Validation
+## Resume and validation
 
-Run from the repository root with Node and Playwright installed:
+Next pending ID: **WT-0017**. Generate each next car independently from its exact catalog metadata, inspect the result, encode a new file under `images/`, and populate that record's `image` path only after the file exists. Commit completed batches to main. Keep every edit inside this directory and do not alter the approved first eight images.
+
+Run from repository root with Playwright and Chromium installed:
 
 ```sh
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright CHROMIUM_PATH=/usr/bin/chromium node galactic-hypercars-image-preview/tests/gallery.test.mjs
 ```
 
-The test checks source count, exact catalog mappings, eight distinct SHA-256 image hashes, WebP headers, per-image size limits, all colors/propulsion types, image decoding, no horizontal overflow, anchor navigation, full-image navigation, and browser/resource errors at 375, 768 and 1440 pixels. Optional `EVIDENCE_DIR` saves screenshots outside the repository.
-
-The existing Pages workflow includes the new folder in its push paths so preview changes deploy. Its original application tests and deployment remain in place. Application directories must have zero diff against the base commit.
+Checks cover all 1,000 catalog mappings, exact real-file count, unique SHA-256 image hashes, WebP signatures and size limits, original approved bytes, decoded browser images, lazy loading, search, empty results, pagination, pending records without images, full-image navigation, and no horizontal overflow/resource errors at 375, 768 and 1440 pixels. The existing Pages workflow already deploys this preview folder.
