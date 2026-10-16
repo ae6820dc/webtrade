@@ -4,7 +4,7 @@ Preview: https://ae6820dc.github.io/webtrade/galactic-hypercars-image-preview/in
 
 ## Verified coverage
 
-**16 real, distinct WebP files completed; 984 images pending.** WT-0001–WT-0008 are the approved originals, preserved byte-for-byte. Batch 02 adds WT-0009–WT-0016. This is a completed eight-image generation batch, not full completion of issue #2. No generation quota error was observed in this batch; the remaining generation work is still outstanding.
+**24 real, distinct WebP files completed; 976 images pending.** WT-0001–WT-0008 are the approved originals, preserved byte-for-byte. Batch 02 adds WT-0009–WT-0016; batch 03 adds WT-0017–WT-0024. This run completed 16 additional images in two batches, not full completion of issue #2. No generation quota error was observed in this batch; the remaining generation work is still outstanding.
 
 All work remains in this separate preview directory. The original `galactic-hypercars/` application and its assets are unchanged. Preview approval does not authorize integration into that application.
 
@@ -27,9 +27,22 @@ All images were individually generated with the available OpenAI image-generatio
 
 Each new image was visually inspected and encoded from its independent generated PNG as 1536 × 1024 WebP using Pillow quality 84, method 6. Batch 02 files are 209,422–348,598 bytes each. Approved batch 01 files were not re-encoded.
 
+Batch 03 uses the same individual generation and optimization process. Its eight files are 223,092–359,440 bytes each:
+
+| ID | Design direction |
+| --- | --- |
+| WT-0017 | Novaryn Eclipse S-3016; silver magnetic manta with hollow pontoons; ocean eclipse |
+| WT-0018 | Titanveil Spectre GT-3017; obsidian antimatter land yacht with stacked lamps; desert terminal |
+| WT-0019 | Aurorix Eclipse GT-3018; blue plasma cab-forward coupe and rear turbines; stellar maintenance bay |
+| WT-0020 | Nebulon Eclipse GT-3019; purple antigravity toroidal pods and elliptical fuselage; lunar plaza |
+| WT-0021 | Spectraxis Seraph XR-3020; cyan quantum single-seat exoskeleton racer; white test chamber |
+| WT-0022 | Ionara Vector S-3021; gold fusion diamond wedge and layered armor; alien forest |
+| WT-0023 | Gravion Vortex GT-3022; red magnetic four-seat coupe and long skids; asteroid cavern |
+| WT-0024 | Pulsaris Phantom S-3023; white antimatter three-ridge wedge; pulsar dock |
+
 ## Resume and validation
 
-Next pending ID: **WT-0017**. Generate each next car independently from its exact catalog metadata, inspect the result, encode a new file under `images/`, and populate that record's `image` path only after the file exists. Commit completed batches to main. Keep every edit inside this directory and do not alter the approved first eight images.
+Next pending ID: **WT-0025**. Generate each next car independently from its exact catalog metadata, inspect the result, encode a new file under `images/`, and populate that record's `image` path only after the file exists. Commit completed batches to main. Keep every edit inside this directory and do not alter the approved first eight images.
 
 Run from repository root with Playwright and Chromium installed:
 

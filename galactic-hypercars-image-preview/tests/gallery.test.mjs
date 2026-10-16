@@ -38,7 +38,7 @@ try {
   assert.equal(await page.locator('article h2').textContent(),'Phantom GT-3015');
   await page.locator('.art img').evaluate(i=>i.decode());
   await page.locator('.art').click();assert.equal(await page.locator('img').evaluate(i=>i.naturalWidth),1536);await page.goBack();
-  await page.locator('#search').fill('purple'); assert.equal(await page.locator('article').count(),2);
+  await page.locator('#search').fill('purple'); assert.equal(await page.locator('article').count(),Math.min(12,completed.filter(c=>c.exterior==='Nebula lila').length));
   await page.locator('#search').fill('no such car');assert.equal(await page.locator('article').count(),0);assert.equal(await page.locator('#results').textContent(),'No matching cars.');
   await page.locator('#status').selectOption('all');await page.locator('#search').fill('WT-1000');assert.equal(await page.locator('article').count(),1);assert.equal(await page.locator('article img').count(),0);assert.match(await page.locator('article').textContent(),/Pending generation/);
   await page.locator('#status').selectOption('pending');await page.locator('#search').fill('');assert.match(await page.locator('#results').textContent(),new RegExp(String(1000-completed.length)));

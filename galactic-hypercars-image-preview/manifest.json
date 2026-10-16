@@ -153,7 +153,7 @@
       "model": "Eclipse S-3016",
       "exterior": "Ion ezüst",
       "propulsion": "Mágneses lebegés",
-      "image": null
+      "image": "images/wt-0017.webp"
     },
     {
       "id": "WT-0018",
@@ -162,7 +162,7 @@
       "model": "Spectre GT-3017",
       "exterior": "Obszidián",
       "propulsion": "Antianyag-rendszer",
-      "image": null
+      "image": "images/wt-0018.webp"
     },
     {
       "id": "WT-0019",
@@ -171,7 +171,7 @@
       "model": "Eclipse GT-3018",
       "exterior": "Plazma kék",
       "propulsion": "Plazmahajtás",
-      "image": null
+      "image": "images/wt-0019.webp"
     },
     {
       "id": "WT-0020",
@@ -180,7 +180,7 @@
       "model": "Eclipse GT-3019",
       "exterior": "Nebula lila",
       "propulsion": "Antigravitációs motor",
-      "image": null
+      "image": "images/wt-0020.webp"
     },
     {
       "id": "WT-0021",
@@ -189,7 +189,7 @@
       "model": "Seraph XR-3020",
       "exterior": "Aurora cián",
       "propulsion": "Kvantumhajtás",
-      "image": null
+      "image": "images/wt-0021.webp"
     },
     {
       "id": "WT-0022",
@@ -198,7 +198,7 @@
       "model": "Vector S-3021",
       "exterior": "Napkorona arany",
       "propulsion": "Fúziós reaktor",
-      "image": null
+      "image": "images/wt-0022.webp"
     },
     {
       "id": "WT-0023",
@@ -207,7 +207,7 @@
       "model": "Vortex GT-3022",
       "exterior": "Mars vörös",
       "propulsion": "Mágneses lebegés",
-      "image": null
+      "image": "images/wt-0023.webp"
     },
     {
       "id": "WT-0024",
@@ -216,7 +216,7 @@
       "model": "Phantom S-3023",
       "exterior": "Holdfehér",
       "propulsion": "Antianyag-rendszer",
-      "image": null
+      "image": "images/wt-0024.webp"
     },
     {
       "id": "WT-0025",
