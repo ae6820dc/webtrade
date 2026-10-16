@@ -1,0 +1,78 @@
+{
+  "catalogCount": 1000,
+  "source": "galactic-hypercars/catalog-data.js",
+  "cars": [
+    {
+      "id": "WT-0001",
+      "name": "Aetherion Vortex S-3000",
+      "manufacturer": "Aetherion",
+      "model": "Vortex S-3000",
+      "exterior": "Ion ezüst",
+      "propulsion": "Plazmahajtás",
+      "image": "images/wt-0001.webp"
+    },
+    {
+      "id": "WT-0002",
+      "name": "Veylora Nova GT-3001",
+      "manufacturer": "Veylora",
+      "model": "Nova GT-3001",
+      "exterior": "Obszidián",
+      "propulsion": "Antigravitációs motor",
+      "image": "images/wt-0002.webp"
+    },
+    {
+      "id": "WT-0003",
+      "name": "Nexaris Vortex ONE-3002",
+      "manufacturer": "Nexaris",
+      "model": "Vortex ONE-3002",
+      "exterior": "Plazma kék",
+      "propulsion": "Kvantumhajtás",
+      "image": "images/wt-0003.webp"
+    },
+    {
+      "id": "WT-0004",
+      "name": "Orbyte Vortex XR-3003",
+      "manufacturer": "Orbyte",
+      "model": "Vortex XR-3003",
+      "exterior": "Nebula lila",
+      "propulsion": "Fúziós reaktor",
+      "image": "images/wt-0004.webp"
+    },
+    {
+      "id": "WT-0005",
+      "name": "Solvex Mirage GT-3004",
+      "manufacturer": "Solvex",
+      "model": "Mirage GT-3004",
+      "exterior": "Aurora cián",
+      "propulsion": "Mágneses lebegés",
+      "image": "images/wt-0005.webp"
+    },
+    {
+      "id": "WT-0006",
+      "name": "Quantum Forge Vortex GT-3005",
+      "manufacturer": "Quantum Forge",
+      "model": "Vortex GT-3005",
+      "exterior": "Napkorona arany",
+      "propulsion": "Antianyag-rendszer",
+      "image": "images/wt-0006.webp"
+    },
+    {
+      "id": "WT-0007",
+      "name": "Astraeus Mirage ONE-3006",
+      "manufacturer": "Astraeus",
+      "model": "Mirage ONE-3006",
+      "exterior": "Mars vörös",
+      "propulsion": "Plazmahajtás",
+      "image": "images/wt-0007.webp"
+    },
+    {
+      "id": "WT-0008",
+      "name": "Nyx Motors Phantom RS-3007",
+      "manufacturer": "Nyx Motors",
+      "model": "Phantom RS-3007",
+      "exterior": "Holdfehér",
+      "propulsion": "Antigravitációs motor",
+      "image": "images/wt-0008.webp"
+    }
+  ]
+}

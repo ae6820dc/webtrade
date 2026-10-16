@@ -2,7 +2,7 @@ name: Webtrade tests and Pages deployment
 on:
   push:
     branches: [main]
-    paths: ['cyber-luxury-agency/**', 'galactic-hypercars/**', '.github/workflows/webtrade-pages.yml']
+    paths: ['galactic-hypercars-image-preview/**', 'cyber-luxury-agency/**', 'galactic-hypercars/**', '.github/workflows/webtrade-pages.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,6 +26,11 @@ jobs:
       - run: npm install --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - name: Verify standalone hypercar image preview
+        run: |
+          export PLAYWRIGHT_MODULE="$PWD/node_modules/playwright"
+          export CHROMIUM_PATH="$(node -e 'console.log(require("playwright").chromium.executablePath())')"
+          node ../galactic-hypercars-image-preview/tests/gallery.test.mjs
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
