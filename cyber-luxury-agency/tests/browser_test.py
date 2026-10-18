@@ -69,6 +69,53 @@ class BrowserTests(unittest.TestCase):
             page.reload()
             expect(page.locator('#age-gate')).to_be_visible()
 
+    def test_age_confirmation_new_tabs_windows_and_restart(self):
+        with tempfile.TemporaryDirectory() as profile:
+            def launch():
+                return self.pw.chromium.launch_persistent_context(
+                    profile, executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'),
+                    headless=True, args=['--no-sandbox','--disable-dev-shm-usage'])
+            context = launch()
+            try:
+                first = context.new_page()
+                first.goto(self.url)
+                expect(first.locator('#age-gate')).to_be_visible()
+                expect(first.locator('#enter')).to_be_disabled()
+                with first.expect_popup() as opened:
+                    first.evaluate("url => window.open(url, '_blank', 'popup,width=900,height=800')", self.url)
+                window = opened.value
+                expect(window.locator('#age-gate')).to_be_visible()
+                first.locator('#adult-check').check()
+                first.locator('#enter').click()
+                expect(first.locator('#age-gate')).not_to_be_visible()
+                expect(window.locator('#age-gate')).not_to_be_visible()
+                first.reload()
+                expect(first.locator('.card')).to_have_count(12)
+                expect(first.locator('#age-gate')).not_to_be_visible()
+                tab = context.new_page()
+                tab.goto(self.url)
+                expect(tab.locator('.card')).to_have_count(12)
+                expect(tab.locator('#age-gate')).not_to_be_visible()
+                with first.expect_popup() as opened:
+                    first.evaluate("url => window.open(url, '_blank', 'popup,width=900,height=800')", self.url)
+                window = opened.value
+                expect(window.locator('.card')).to_have_count(12)
+                expect(window.locator('#age-gate')).not_to_be_visible()
+                self.assertEqual(window.evaluate("localStorage.getItem('noir-adult')"), 'yes')
+            finally:
+                context.close()
+            context = launch()
+            try:
+                page = context.new_page()
+                page.goto(self.url)
+                expect(page.locator('.card')).to_have_count(12)
+                expect(page.locator('#age-gate')).not_to_be_visible()
+                page.evaluate("localStorage.removeItem('noir-adult')")
+                page.reload()
+                expect(page.locator('#age-gate')).to_be_visible()
+            finally:
+                context.close()
+
     def test_01_age_gate_and_layout(self):
         expect(self.page.locator('#enter')).to_be_disabled();self.page.keyboard.press('Escape');expect(self.page.locator('#age-gate')).to_be_visible()
         self.page.locator('#decline').click();expect(self.page.locator('#age-error')).to_contain_text('elutasítva')

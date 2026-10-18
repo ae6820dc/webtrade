@@ -1,3 +1,4 @@
+import {revokeAgeConfirmation} from './age-gate.js';
 import * as D from './core.js';
 import {DemoStore} from './storage.js';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -128,7 +129,7 @@ case 'export':download('noir-prive-demo-backup.json',JSON.stringify(state,null,2
 case 'recovery-export':{const raw=await store.recovery();if(!raw)throw new Error('Nincs elkülönített sérült demómentés.');download('noir-prive-corrupt-backup.json',JSON.stringify(raw,null,2),'application/json');break;}
 case 'reset-confirm':modal('Új fejezet, tiszta lappal','<div class="notice">Minden helyi demófiók, kredit, foglalás, kép, üzenet, kedvenc és mentett keresés törlődik. A 216 eredeti fiktív karakter megmarad.</div><p>Előtte készíthetsz JSON biztonsági mentést.</p><div class="modal-actions">'+button('export','Mentés letöltése')+button('reset','Minden demóadat törlése','','danger')+button('close','Mégsem','','quiet')+'</div>');break;
 case 'reset':{const r=await store.reset();state=r.state;filters={};accountTab='overview';close();updateHeader();navigate('discover');toast('A demó alaphelyzetbe állítva.');break;}
-case 'exit-gate':close();try{localStorage.removeItem('noir-adult');sessionStorage.removeItem('noir-adult');}catch{}$('#adult-check').checked=false;$('#enter').disabled=true;$('#age-gate').showModal();break;
+case 'exit-gate':close();revokeAgeConfirmation();break;
 }
 }
 function captureFilters(){const form=$('#search-form');if(!form)return;const data=new FormData(form);for(const k of ['q','city','district','minAge','maxAge','minPrice','maxPrice','date','rating'])if(data.has(k))filters[k]=data.get(k);if(advanced){filters.premium=data.has('premium');filters.verified=data.has('verified');}}
@@ -159,11 +160,7 @@ if(e.target.id==='date'&&e.target.closest('#booking-form')){bookingDraft={...boo
 if(e.target.id==='images'){const files=[...e.target.files];if(files.length>3)throw new Error('Legfeljebb három demókép tölthető fel.');const results=[];for(const file of files){if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>500*1024)throw new Error('Csak PNG/JPEG/WebP képet válassz, legfeljebb 500 KB mérettel.');const src=await new Promise((res,rej)=>{const reader=new FileReader();reader.onload=()=>res(reader.result);reader.onerror=()=>rej(new Error('A kép olvasása sikertelen.'));reader.readAsDataURL(file);});await new Promise((res,rej)=>{const img=new Image();img.onload=()=>res();img.onerror=()=>rej(new Error('A feltöltött fájl nem érvényes kép.'));img.src=src;});results.push(src);}adImages=results;$('#upload-preview').innerHTML=results.map(src=>`<img src="${esc(src)}" alt="Demókép előnézete">`).join('');}
 }catch(error){if(e.target.dataset.compare)e.target.checked=state.compare.includes(e.target.dataset.compare);if(e.target.id==='images')e.target.value='';showError(error);}});
 $('#modal').addEventListener('cancel',()=>{modalKind='';bookingDraft=null;});
-$('#age-gate').addEventListener('cancel',e=>e.preventDefault());
-$('#adult-check').addEventListener('change',e=>$('#enter').disabled=!e.target.checked);
-$('#enter').addEventListener('click',()=>{if($('#adult-check').checked){try{localStorage.setItem('noir-adult','yes');}catch{}$('#age-gate').close();}});
-$('#decline').addEventListener('click',()=>{$('#age-error').textContent='A belépés elutasítva. A demó csak 18 év feletti nyilatkozattal használható. Ezt a lapot biztonságosan bezárhatod.';$('#adult-check').checked=false;$('#enter').disabled=true;});
 window.addEventListener('hashchange',()=>{close();renderPage();window.scrollTo(0,0);});
 store.onChange=async()=>{try{state=await store.read();updateHeader();renderPage();if($('#modal').open){close();toast('A demóadatok egy másik lapon frissültek. Nyisd meg újra a műveletet.');}}catch(e){toast(e.message,true);}};
-async function init(){try{let accepted=false;try{accepted=localStorage.getItem('noir-adult')==='yes';}catch{}if(!accepted)$('#age-gate').showModal();const [saved,response]=await Promise.all([store.open(),fetch('./profiles.json')]);if(!response.ok)throw new Error('A katalógus nem tölthető be.');catalog=await response.json();if(!Array.isArray(catalog)||catalog.length<200||catalog.some(p=>p.age<21))throw new Error('A katalógus ellenőrzése sikertelen.');state=saved;updateHeader();renderPage();}catch(e){$('#main').innerHTML=empty('A kollekció nem tölthető be.',e.message,null);toast('Betöltési hiba. Töltsd újra az oldalt.',true);}}
+async function init(){try{const [saved,response]=await Promise.all([store.open(),fetch('./profiles.json')]);if(!response.ok)throw new Error('A katalógus nem tölthető be.');catalog=await response.json();if(!Array.isArray(catalog)||catalog.length<200||catalog.some(p=>p.age<21))throw new Error('A katalógus ellenőrzése sikertelen.');state=saved;updateHeader();renderPage();}catch(e){$('#main').innerHTML=empty('A kollekció nem tölthető be.',e.message,null);toast('Betöltési hiba. Töltsd újra az oldalt.',true);}}
 init();
