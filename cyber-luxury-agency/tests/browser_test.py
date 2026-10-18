@@ -48,6 +48,27 @@ class BrowserTests(unittest.TestCase):
             self.click('demo-login',role)
         expect(self.page.locator('.screen-title .eyebrow')).to_contain_text({'customer':'ÜGYFÉL','advertiser':'HIRDETŐ','admin':'ADMINISZTRÁTOR'}[role])
     def state(self): return self.page.evaluate(READ)
+    def test_age_confirmation_persists_and_revokes(self):
+        self.assertIsNone(self.page.evaluate("localStorage.getItem('noir-adult')"))
+        self.page.locator('#decline').click()
+        self.assertIsNone(self.page.evaluate("localStorage.getItem('noir-adult')"))
+        self.enter()
+        self.assertEqual(self.page.evaluate("localStorage.getItem('noir-adult')"), 'yes')
+        self.page.reload()
+        expect(self.page.locator('#age-gate')).not_to_be_visible()
+        saved = self.context.storage_state()
+        with self.browser.new_context(storage_state=saved) as restored:
+            page = restored.new_page()
+            page.goto(self.url)
+            expect(page.locator('.card')).to_have_count(12)
+            expect(page.locator('#age-gate')).not_to_be_visible()
+            page.locator('[data-action="legal"]').click()
+            page.locator('[data-action="exit-gate"]').click()
+            expect(page.locator('#age-gate')).to_be_visible()
+            self.assertIsNone(page.evaluate("localStorage.getItem('noir-adult')"))
+            page.reload()
+            expect(page.locator('#age-gate')).to_be_visible()
+
     def test_01_age_gate_and_layout(self):
         expect(self.page.locator('#enter')).to_be_disabled();self.page.keyboard.press('Escape');expect(self.page.locator('#age-gate')).to_be_visible()
         self.page.locator('#decline').click();expect(self.page.locator('#age-error')).to_contain_text('elutasítva')
